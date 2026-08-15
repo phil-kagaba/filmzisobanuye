@@ -126,24 +126,46 @@ const Home = () => {
   const [enhancingVideos, setEnhancingVideos] = useState(false);
   const [visibleCount, setVisibleCount] = useState(20);
 
+  // useEffect(() => {
+  //   const fetchAndEnhanceVideos = async () => {
+  //     try {
+  //       // const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/videos`);
+  //       axios.get("/api/videos");
+  //       const data = res.data || [];
+  //       setEnhancingVideos(true);
+  //       const enhancedData = await enhanceVideosWithTMDB(data);
+  //       setVideos(enhancedData);
+  //       setFilteredVideos(enhancedData);
+  //     } catch {
+  //       setError('Check your internet or the server is down');
+  //     } finally {
+  //       setLoading(false);
+  //       setEnhancingVideos(false);
+  //     }
+  //   };
+  //   fetchAndEnhanceVideos();
+  // }, []);
   useEffect(() => {
-    const fetchAndEnhanceVideos = async () => {
-      try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/videos`);
-        const data = res.data || [];
-        setEnhancingVideos(true);
-        const enhancedData = await enhanceVideosWithTMDB(data);
-        setVideos(enhancedData);
-        setFilteredVideos(enhancedData);
-      } catch {
-        setError('Check your internet or the server is down');
-      } finally {
-        setLoading(false);
-        setEnhancingVideos(false);
-      }
-    };
-    fetchAndEnhanceVideos();
-  }, []);
+  const fetchVideos = async () => {
+    try {
+      const res = await axios.get("/api/videos");
+
+      const data = res.data || [];
+
+      console.log("VIDEOS FROM NEXT API:", data);
+
+      setVideos(data);
+      setFilteredVideos(data);
+    } catch (error) {
+      console.error("VIDEO FETCH ERROR:", error);
+      setError("Check your internet or the server is down");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchVideos();
+}, []);
 
   const handleSearch = (term) => {
     const results = videos.filter((video) => (video.enhancedTitle || '').toLowerCase().includes(term.toLowerCase()));

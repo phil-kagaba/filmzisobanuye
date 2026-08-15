@@ -29,7 +29,7 @@ const Header = ({ onSearch, searchResults }) => {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-2">
           <img src="/logo.png" alt="Logo" className="w-10 h-10 object-contain" />
-          <span className="text-lg font-bold whitespace-nowrap">AgasosabuyefilmZone</span>
+          <span className="text-lg font-bold whitespace-nowrap">AgasosabuyeZone</span>
         </Link>
 
         <nav className="flex flex-wrap justify-center sm:justify-start gap-3 text-sm sm:text-base">
