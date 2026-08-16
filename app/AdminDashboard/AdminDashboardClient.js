@@ -259,23 +259,6 @@ export default function AdminDashboardClient() {
               />
             </div>
 
-            {/* DESCRIPTION */}
-            <div>
-              <label className="block text-gray-300 mb-2">
-                Description
-              </label>
-
-              <textarea
-                value={description}
-                onChange={(e) =>
-                  setDescription(e.target.value)
-                }
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3"
-                rows="4"
-                placeholder="Movie description"
-              />
-            </div>
-
             {/* VIDEO */}
             <div>
               <label className="block text-gray-300 mb-2">
@@ -294,26 +277,7 @@ export default function AdminDashboardClient() {
                 className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3"
                 required
               />
-            </div>
-
-            {/* SNAPSHOT */}
-            <div>
-              <label className="block text-gray-300 mb-2">
-                Thumbnail / Snapshot
-              </label>
-
-              <input
-                id="snapshot"
-                type="file"
-                accept="image/*"
-                onChange={(e) =>
-                  setSnapshot(
-                    e.target.files?.[0] || null
-                  )
-                }
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3"
-              />
-            </div>
+            </div>     
 
             {/* UPLOAD BUTTON */}
             <button

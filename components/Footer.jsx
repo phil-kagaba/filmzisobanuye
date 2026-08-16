@@ -40,67 +40,61 @@ const Footer = () => {
         </div>
 
         {/* Company */}
-        <div>
+    <div>
           <h4 className="text-white font-semibold mb-3">
             Company
           </h4>
 
           <ul className="space-y-2 text-sm">
             <li>
-              <a href="#" className="hover:text-red-500 transition">
+              <Link href="/about" className="hover:text-red-500 transition">
                 About Us
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a href="#" className="hover:text-red-500 transition">
+              <Link href="/team" className="hover:text-red-500 transition">
                 Team
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a href="#" className="hover:text-red-500 transition">
-                Careers
-              </a>
-            </li>
-
-            <li>
-              <a href="#" className="hover:text-red-500 transition">
+              <Link href="/blog" className="hover:text-red-500 transition">
                 Blog
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
 
         {/* Support */}
-        <div>
+       <div>
           <h4 className="text-white font-semibold mb-3">
             Support
           </h4>
 
           <ul className="space-y-2 text-sm">
             <li>
-              <a href="#" className="hover:text-red-500 transition">
+              <Link href="/help" className="hover:text-red-500 transition">
                 Help Center
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a href="#" className="hover:text-red-500 transition">
+              <Link href="/contact" className="hover:text-red-500 transition">
                 Contact Us
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a href="#" className="hover:text-red-500 transition">
+              <Link href="/privacy" className="hover:text-red-500 transition">
                 Privacy Policy
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a href="#" className="hover:text-red-500 transition">
+              <Link href="/terms" className="hover:text-red-500 transition">
                 Terms of Service
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
