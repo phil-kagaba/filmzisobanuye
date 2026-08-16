@@ -1,117 +1,114 @@
-// import axios from "axios";
 
-// const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_KEY;
-// const TMDB_BASE_URL = process.env.NEXT_PUBLIC_TMDB_BASE_URL;
-
-// const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
-
-// export const getMovieTrailer = async (tmdbId) => {
-//   try {
-//     const response = await axios.get(
-//       `${TMDB_BASE_URL}/movie/${tmdbId}/videos?api_key=${TMDB_API_KEY}&language=en-US`
-//     );
-
-//     if (response.data.results && response.data.results.length > 0) {
-//       const trailer = response.data.results.find(
-//         (video) =>
-//           video.site === "YouTube" &&
-//           (video.type === "Trailer" || video.type === "Teaser")
-//       );
-
-//       return trailer ? trailer.key : null;
-//     }
-
-//     return null;
-//   } catch (error) {
-//     console.error("Error fetching trailer:", error);
-//     return null;
-//   }
-// };
-
-// export const searchMovieByTitle = async (title) => {
-//   try {
-//     const cleanTitle = title.replace(
-//       /\.(mp4|avi|mkv|mov|wmv|flv|webm)$/i,
-//       ""
-//     );
-
-//     const response = await axios.get(
-//       `${TMDB_BASE_URL}/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(
-//         cleanTitle
-//       )}`
-//     );
-
-//     if (response.data.results && response.data.results.length > 0) {
-//       const movie = response.data.results[0];
-
-//       return {
-//         title: movie.title,
-//         description: movie.overview,
-//         poster: movie.poster_path
-//           ? `${TMDB_IMAGE_BASE_URL}${movie.poster_path}`
-//           : null,
-//         backdrop: movie.backdrop_path
-//           ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
-//           : null,
-//         rating: movie.vote_average,
-//         releaseDate: movie.release_date,
-//         tmdbId: movie.id,
-//       };
-//     }
-
-//     return null;
-//   } catch (error) {
-//     console.error("Error fetching TMDB data:", error);
-//     return null;
-//   }
-// };
-
-// export const enhanceVideosWithTMDB = async (videos) => {
-//   const enhancedVideos = await Promise.all(
-//     videos.map(async (video) => {
-//       const tmdbData = await searchMovieByTitle(
-//         video.title || video.filename
-//       );
-
-//       return {
-//         ...video,
-//         tmdb: tmdbData,
-//         enhancedTitle:
-//           tmdbData?.title || video.title || video.filename,
-//         enhancedDescription:
-//           tmdbData?.description || video.file_descr || "",
-//         enhancedPoster:
-//           tmdbData?.poster ||
-//           video.thumbnail ||
-//           video.screenshot ||
-//           `https://cdn.streamhg.com/snapshots/${
-//             video.file_code || video.filecode
-//           }.jpg`,
-//         enhancedBackdrop:
-//           tmdbData?.backdrop ||
-//           video.thumbnail ||
-//           video.screenshot ||
-//           `https://cdn.streamhg.com/snapshots/${
-//             video.file_code || video.filecode
-//           }.jpg`,
-//         enhancedRating: tmdbData?.rating || 8.5,
-//       };
-//     })
-//   );
-
-//   return enhancedVideos;
-// };
 import axios from "axios";
 
 const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_KEY;
-const TMDB_BASE_URL = process.env.NEXT_PUBLIC_TMDB_BASE_URL;
+const TMDB_BASE_URL =
+  process.env.NEXT_PUBLIC_TMDB_BASE_URL ||
+  "https://api.themoviedb.org/3";
 
-const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
-const TMDB_BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/w1280";
+const TMDB_IMAGE_BASE_URL =
+  "https://image.tmdb.org/t/p/w500";
 
-// Get trailer from TMDB
+
+// ========================================
+// SEARCH MOVIE
+// ========================================
+
+export const searchMovieByTitle = async (title) => {
+  try {
+    if (!title) {
+      console.log("TMDB: No title provided");
+      return null;
+    }
+
+    if (!TMDB_API_KEY) {
+      console.error("TMDB API KEY IS MISSING");
+      return null;
+    }
+
+    // Remove video extensions
+    const cleanTitle = title
+      .replace(/\.(mp4|avi|mkv|mov|wmv|flv|webm)$/i, "")
+      .trim();
+
+    console.log("TMDB searching:", cleanTitle);
+
+    const response = await axios.get(
+      `${TMDB_BASE_URL}/search/movie`,
+      {
+        params: {
+          api_key: TMDB_API_KEY,
+          query: cleanTitle,
+          language: "en-US",
+        },
+      }
+    );
+
+    console.log(
+      "TMDB results:",
+      response.data.results
+    );
+
+    if (
+      !response.data.results ||
+      response.data.results.length === 0
+    ) {
+      console.log(
+        "TMDB: Movie not found:",
+        cleanTitle
+      );
+
+      return null;
+    }
+
+    const movie = response.data.results[0];
+
+    return {
+      title: movie.title,
+
+      description:
+        movie.overview || "",
+
+      poster: movie.poster_path
+        ? `${TMDB_IMAGE_BASE_URL}${movie.poster_path}`
+        : null,
+
+      backdrop: movie.backdrop_path
+        ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
+        : null,
+
+      rating:
+        movie.vote_average || 0,
+
+      releaseDate:
+        movie.release_date || "",
+
+      tmdbId:
+        movie.id,
+    };
+
+  } catch (error) {
+    console.error(
+      "TMDB SEARCH ERROR:",
+      error.response?.data ||
+        error.message
+    );
+
+    return null;
+  }
+};
+
+
+// ========================================
+// GET TRAILER
+// ========================================
+
 export const getMovieTrailer = async (tmdbId) => {
   try {
+    if (!tmdbId || !TMDB_API_KEY) {
+      return null;
+    }
+
     const response = await axios.get(
       `${TMDB_BASE_URL}/movie/${tmdbId}/videos`,
       {
@@ -122,112 +119,104 @@ export const getMovieTrailer = async (tmdbId) => {
       }
     );
 
-    if (response.data.results?.length > 0) {
-      const trailer = response.data.results.find(
-        (video) =>
-          video.site === "YouTube" &&
-          (video.type === "Trailer" || video.type === "Teaser")
-      );
+    const videos =
+      response.data?.results || [];
 
-      return trailer ? trailer.key : null;
-    }
+    const trailer = videos.find(
+      (video) =>
+        video.site === "YouTube" &&
+        (
+          video.type === "Trailer" ||
+          video.type === "Teaser"
+        )
+    );
 
-    return null;
+    return trailer
+      ? trailer.key
+      : null;
+
   } catch (error) {
-    console.error("Error fetching trailer:", error);
+    console.error(
+      "TMDB TRAILER ERROR:",
+      error.response?.data ||
+        error.message
+    );
+
     return null;
   }
 };
 
-// Search movie on TMDB by title
-export const searchMovieByTitle = async (title) => {
-  try {
-    if (!TMDB_API_KEY || !TMDB_BASE_URL) {
-      console.error("TMDB environment variables are missing.");
-      return null;
-    }
 
-    const cleanTitle = title
-      .replace(/\.(mp4|avi|mkv|mov|wmv|flv|webm)$/i, "")
-      .trim();
+// ========================================
+// ENHANCE STREAMHG VIDEOS
+// ========================================
 
-    const response = await axios.get(`${TMDB_BASE_URL}/search/movie`, {
-      params: {
-        api_key: TMDB_API_KEY,
-        query: cleanTitle,
-      },
-    });
+export const enhanceVideosWithTMDB = async (
+  videos
+) => {
 
-    if (response.data.results?.length > 0) {
-      const movie = response.data.results[0];
-
-      return {
-        title: movie.title,
-        description: movie.overview,
-        poster: movie.poster_path
-          ? `${TMDB_IMAGE_BASE_URL}${movie.poster_path}`
-          : null,
-        backdrop: movie.backdrop_path
-          ? `${TMDB_BACKDROP_BASE_URL}${movie.backdrop_path}`
-          : null,
-        rating: movie.vote_average,
-        releaseDate: movie.release_date,
-        tmdbId: movie.id,
-      };
-    }
-
-    return null;
-  } catch (error) {
-    console.error("Error fetching TMDB data:", error);
-    return null;
+  if (!Array.isArray(videos)) {
+    return [];
   }
-};
 
-// Add TMDB information to StreamHG videos
-export const enhanceVideosWithTMDB = async (videos) => {
-  const enhancedVideos = await Promise.all(
-    videos.map(async (video) => {
-      const tmdbData = await searchMovieByTitle(
-        video.title || video.filename || ""
-      );
+  console.log(
+    "Enhancing",
+    videos.length,
+    "videos with TMDB..."
+  );
 
-      return {
-        ...video,
+  const enhancedVideos =
+    await Promise.all(
+      videos.map(async (video) => {
 
-        tmdb: tmdbData,
-
-        enhancedTitle:
-          tmdbData?.title ||
+        const title =
           video.title ||
           video.filename ||
-          "Unknown Movie",
+          "";
 
-        enhancedDescription:
-          tmdbData?.description ||
-          video.file_descr ||
-          "",
+        const tmdbData =
+          await searchMovieByTitle(title);
 
-        enhancedPoster:
-          tmdbData?.poster ||
-          video.thumbnail ||
-          video.screenshot ||
-          `https://cdn.streamhg.com/snapshots/${
-            video.file_code || video.filecode
-          }.jpg`,
+        return {
+          ...video,
 
-        enhancedBackdrop:
-          tmdbData?.backdrop ||
-          video.thumbnail ||
-          video.screenshot ||
-          `https://cdn.streamhg.com/snapshots/${
-            video.file_code || video.filecode
-          }.jpg`,
+          tmdb: tmdbData,
 
-        enhancedRating:
-          tmdbData?.rating ||
-          8.5,
-      };
-    })
+          enhancedTitle:
+            tmdbData?.title ||
+            title,
+
+          enhancedDescription:
+            tmdbData?.description ||
+            video.file_descr ||
+            "",
+
+          enhancedPoster:
+            tmdbData?.poster ||
+            video.thumbnail ||
+            video.screenshot ||
+            null,
+
+          enhancedBackdrop:
+            tmdbData?.backdrop ||
+            video.thumbnail ||
+            video.screenshot ||
+            null,
+
+          enhancedRating:
+            tmdbData?.rating ||
+            0,
+
+          enhancedReleaseDate:
+            tmdbData?.releaseDate ||
+            "",
+        };
+      })
+    );
+
+  console.log(
+    "TMDB enhancement complete:",
+    enhancedVideos
   );
 
   return enhancedVideos;
