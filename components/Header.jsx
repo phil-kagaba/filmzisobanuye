@@ -32,12 +32,12 @@ const Header = ({ onSearch, searchResults }) => {
           <span className="text-lg font-bold whitespace-nowrap">AgasosabuyeZone</span>
         </Link>
 
-        <nav className="flex flex-wrap justify-center sm:justify-start gap-3 text-sm sm:text-base">
+        <nav className="flex flex-wrap justify-center sm:justify-start gap-17 text-sm sm:text-base">
           <Link href="/" className="hover:text-blue-400 transition">Home</Link>
-          <Link href="/trailer" className="hover:text-blue-400 transition">Trailers</Link>
-          <a href="#movies" className="hover:text-blue-400 transition">Movies</a>
-          <a href="#shows" className="hover:text-blue-400 transition">TV Shows</a>
-          <a href="#categories" className="hover:text-blue-400 transition">Categories</a>
+          <Link href="/trailer" className="hover:text-blue-400 transition">Recent-Movie-Trailers</Link>
+          {/* <a href="#movies" className="hover:text-blue-400 transition">Movies</a>
+          <a href="#shows" className="hover:text-blue-400 transition">TV Shows</a> */}
+          {/* <a href="#categories" className="hover:text-blue-400 transition">Categories</a> */}
         </nav>
 
         <div className="relative w-full sm:w-auto flex-grow max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">

@@ -68,9 +68,9 @@ const MyMovieApis = () => {
       <Header />
       <section className="bg-[#0D0D0D] py-10 px-4 min-h-screen">
         <div><Link href="/" className="text-blue-600 underline mb-4 inline-block">← Subira Ahabanza</Link></div>
-        <h2 className="text-3xl font-bold text-center mb-8 text-white">Trailer Za Filime Zikunzwe</h2>
+        <h2 className="text-3xl font-bold text-center mb-8 text-white">Recent Movie Trailers</h2>
         <div className="flex justify-center mb-8">
-          <input type="text" placeholder="Shakisha trailer ushaka..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full max-w-md px-4 py-2 border border-blue-600 bg-[#111] text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-600 placeholder-gray-400" />
+          <input type="text" placeholder="Search Movie Trailer bro..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full max-w-md px-4 py-2 border border-blue-600 bg-[#111] text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-600 placeholder-gray-400" />
         </div>
         {error ? <p className="text-red-500 text-center">Yoo! Habayeho ikibazo.</p> : <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
           {filtered.map((movie) => (
@@ -80,7 +80,7 @@ const MyMovieApis = () => {
               </div>
               <div className="p-2 flex-1 flex flex-col">
                 <h3 className="text-xl font-semibold text-white truncate mb-1">{movie.title || movie.name}</h3>
-                <button onClick={() => handleOpenVideo(movie)} className="mt-auto bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs transition" disabled={loadingVideoId === movie.id}>{loadingVideoId === movie.id ? 'Tegereza gato...' : 'Fungura Trailer'}</button>
+                <button onClick={() => handleOpenVideo(movie)} className="mt-auto bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs transition" disabled={loadingVideoId === movie.id}>{loadingVideoId === movie.id ? 'Wait a min...' : 'Watch Trailer'}</button>
               </div>
             </div>
           ))}
