@@ -45,7 +45,7 @@ const LogoLoader = () => (
   </div>
 
   <div className="text-center">
-    <p className="text-white text-lg font-semibold">
+    <p className="text-white text-sm font-semibold">
       Loading please wait...
     </p>
   </div>
