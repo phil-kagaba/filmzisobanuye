@@ -28,22 +28,28 @@ const logo = '/logo.png';
 
 const LogoLoader = () => (
   <div className="flex flex-col justify-center items-center min-h-screen bg-gray-900">
-    <div className="relative">
-      <div className="w-20 h-20 border-4 border-gray-700 border-t-red-500 rounded-full animate-spin mb-6" />
+  <div className="relative w-20 h-20 mb-5">
 
+    {/* Loading circle */}
+    <div className="absolute inset-0 rounded-full border-4 border-gray-700 border-t-red-500 animate-spin" />
+
+    {/* Logo */}
+    <div className="absolute inset-2 rounded-full overflow-hidden bg-gray-900 flex items-center justify-center">
       <img
         src={logo}
-        alt="PhilmZone Logo"
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-12 w-12 rounded-full object-cover"
+        alt="Agasobanuyefilmzone Logo"
+        className="w-full h-full object-contain rounded-full"
       />
     </div>
 
-    <div className="text-center">
-      <p className="text-white text-xl font-semibold mb-2">
-        Loading please wait...
-      </p>
-    </div>
   </div>
+
+  <div className="text-center">
+    <p className="text-white text-lg font-semibold">
+      Loading please wait...
+    </p>
+  </div>
+</div>
 );
 
 
